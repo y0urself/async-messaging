@@ -14,7 +14,7 @@ PoC
     `rabbitmq-server -detached`
 * test the server with a ping?
 
-```
+```bash
 >rabbitmqctl ping
 Will ping rabbit@localhost. This only checks if the OS process is running and registered with epmd. Timeout: 60000 ms.
 Ping succeeded
@@ -24,13 +24,14 @@ Ping succeeded
 
 * Start the `XML_server.py`
 
-```python
-python3 XML_server.py --host GVMHostname --gmp-username [username] --gmp-password [password]
+```bash
+>python3 XML_server.py --host GVMHostname --gmp-username [username] --gmp-password [password]
 ```
 
 * Start the `XML_client.py` with a XML-Request as a first argument
 
 Example:
-```python
-python3 publisher.py '<get_targets/>'
+
+```bash
+>python3 publisher.py '<get_targets/>'
 ```

@@ -20,7 +20,10 @@ class XMLRpcClient(object):
         if self.corr_id == props.correlation_id:
             self.response = body
 
-    def call(self, n):
+    def call(self, xml_request):
+        """
+        Make a XML request to the GVM by this method, just call it with a XML request as a parameter
+        """
         self.response = None
         self.corr_id = str(uuid.uuid4())
         self.channel.basic_publish(
@@ -30,28 +33,23 @@ class XMLRpcClient(object):
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id,
             ),
-            body=str(n))
+            body=str(xml_request))
         while self.response is None:
             self.connection.process_data_events()
-        return self.response
+        return self.response.decode("utf-8")
 
-client = XMLRpcClient()
+    def __del__(self):
+        self.connection.close()
 
-print(str(client.call("<get_version/>")))
+def main():
+    client = XMLRpcClient()
 
-print(str(client.call("<get_tasks/>")))
+    #print(str(client.call("<get_version/>")))
+    #print(str(client.call("<get_tasks/>")))
+    #print("Received answer: {}".format(client.call("<get_targets/>")))
+    #print(client.call('<modify_target target_id="03426c9e-b1f2-4caf-82a5-1a06784ec992"><name>Upstairs Lab</name><hosts>Testtest</hosts></modify_target>'))
 
-# i = 0
-# while(i < 42):
-#     message = ' '.join(sys.argv[1:]) or "No input given."
-#     message += ' {}'.format(i)
+    print("Received answer: {}".format(client.call(sys.argv[1])))
 
-#     #channel.basic_publish(exchange='', routing_key='durable_queue', body=message, properties=pika.BasicProperties(delivery_mode=2))
-#     channel.basic_publish(exchange='texchange', routing_key='', body=message, properties=pika.BasicProperties(
-#             delivery_mode=2,  # make message persistent
-#         ))
-
-#     print(" [x] Sent '{}'".format(message))
-#     i = i + 1
-
-# connection.close()
+if __name__ == '__main__':
+    main()

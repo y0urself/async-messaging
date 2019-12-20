@@ -24,13 +24,13 @@ Ping succeeded
 
 * Start the `XML_server.py`
 
-```python3
+```python
 python3 XML_server.py --host GVMHostname --gmp-username [username] --gmp-password [password]
 ```
 
 * Start the `XML_client.py` with a XML-Request as a first argument
 
 Example:
-```python3
+```python
 python3 publisher.py '<get_targets/>'
 ```
